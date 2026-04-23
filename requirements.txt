@@ -7,3 +7,4 @@ rank_bm25
 google-generativeai
 groq
 python-dotenv
+ 

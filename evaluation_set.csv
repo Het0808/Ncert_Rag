@@ -1,0 +1,18 @@
+question_id,question,expected_type
+Q01,What is the definition of motion?,answerable
+Q02,What is the SI unit of velocity?,answerable
+Q03,State the formula for average speed.,answerable
+Q04,What is the difference between speed and velocity?,answerable
+Q05,Explain uniform acceleration with an example.,answerable
+Q06,Derive the second equation of motion: s = ut + 1/2 at^2.,answerable
+Q07,What is the average velocity of a particle after one full circular lap?,answerable
+Q08,What does the slope of a distance-time graph represent?,answerable
+Q09,Describe the function of an odometer in vehicles.,answerable
+Q10,Define uniform circular motion.,answerable
+Q11,Can displacement be greater than distance? Explain.,paraphrased
+Q12,How do we calculate speed when it is changing over time?,paraphrased
+Q13,What are the primary products of photosynthesis?,out_of_scope
+Q14,Who was Napoleon Bonaparte?,out_of_scope
+Q15,Explain the process of cell division.,out_of_scope
+Q16,How do lungs exchange oxygen?,out_of_scope
+Q17,Explain quantum entanglement using motion concepts from this chapter.,adversarial

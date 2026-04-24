@@ -48,8 +48,12 @@ We don't just guess accuracy—we measure it. Using our [Advanced Audit Framewor
 ```bash
 ├── brain.py            # Core RAG Logic (Sliding Window + Groq SDK)
 ├── app.py              # Gradio Web Interface
+├── notebook.ipynb      # End-to-end development pipeline
 ├── test_model.py       # Advanced Audit & Metrics Framework
-├── evaluation_guide.md # Technical testing blueprint
+├── evaluation_guide.md # Technical testing blueprint (Open-tier)
+├── failure_modes.md    # Advanced failure analysis (Stretch-tier)
+├── evaluation_results.md # Systematic audit scoring
+├── reflection.md       # Technical report & architecture decisions
 ├── docs/               # Visual assets & Documentation
 └── data/               # NCERT Source Materials (Class 9 Motion)
 ```

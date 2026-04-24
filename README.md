@@ -1,47 +1,47 @@
 # PariShiksha NCERT Study Assistant
 
-A retrieval-augmented QA system for NCERT Class 9 Science, designed to help students interact with their textbooks using AI.
+PariShiksha is a specialized Retrieval-Augmented Generation (RAG) system designed to help Class 9 students master the NCERT Science "Motion" chapter. Unlike general-purpose AI, PariShiksha is strictly grounded in the official textbook content, providing cited answers with specific page references.
 
-## Project Description
-PariShiksha uses Retrieval-Augmented Generation (RAG) to provide accurate answers from the NCERT Class 9 Science textbook. It processes PDF chapters, indexes the content using BM25 and vector embeddings, and uses Gemini AI to answer queries with context.
+## Core Features
+- **Aesthetic Interface**: User-friendly design focuses on pedagogical clarity.
+- **Strict Grounding**: Uses a two-stage prompt validation to prevent hallucinations and strictly follow NCERT material.
+- **Teacher Mode**: Answers include specific citations (e.g., `[ID: chunk_14, Page: 8]`) for student verification.
+- **Advanced Retrieval**: Utilizes BM25 indexing with specialized tokenization for scientific terminology.
 
-## Setup Instructions
+## Getting Started
 
 ### 1. Prerequisites
-- Python 3.10 or higher
-- Git
+- Python 3.10+
+- A Google Gemini API Key ([Get it here](https://aistudio.google.com/app/apikey))
 
-### 2. Clone the Repository
+### 2. Setup
 ```bash
-git clone <your-repo-url>
+git clone <repo-url>
 cd ncert_rag
-```
-
-### 3. Set up Virtual Environment
-```bash
 python -m venv venv
-# Activate on Windows:
+# Windows
 .\venv\Scripts\activate
-# Activate on macOS/Linux:
-source venv/bin/activate
-```
-
-### 4. Install Dependencies
-```bash
 pip install -r requirements.txt
 ```
 
-### 5. Configure API Key
-1. Create a `.env` file in the root directory.
-2. Add your Gemini API Key:
-   ```env
-   GEMINI_API_KEY=your_api_key_here
-   ```
+### 3. Environment Configuration
+Create a `.env` file in the root directory:
+```env
+# Required for LLM Generation
+GEMINI_API_KEY=your_gemini_api_key_here
 
-### 6. Download NCERT Chapters
-Download the PDF chapters from the official link below and place them in a `data/` folder (do not commit them).
+# Required for legacy features in brain.py (Optional)
+GROQ_API_KEY=your_groq_api_key_here
+```
 
-**NCERT Source:** [Class 9 Science (Classroom)](https://ncert.nic.in/textbook.php?iesc1=0-11)
+### 4. Data Preparation
+The system expects the NCERT Motion chapter at `data/motion.pdf`. Due to copyright guidelines, the PDF itself is not committed to this repository. Please download `iesc104.pdf` from the [NCERT Textbook Portal](https://ncert.nic.in/textbook.php) and place it in the `data/` folder.
 
----
-*Note: PDFs are for educational use only according to NCERT guidelines. Do not commit PDF files to this repository.*
+### 5. Running the Assistant
+You can interact with the system through the provided Jupyter notebook or run the `brain.py` script for a quick test:
+```bash
+python brain.py
+```
+
+## System Evaluation
+The system has been rigorously tested against a 17-question evaluation set covering factoids, paraphrased queries, and adversarial out-of-scope prompts. Our final results show high grounding accuracy with mandatory refusal for non-textbook topics. See `evaluation_results.md` for details.

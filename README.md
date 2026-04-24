@@ -49,7 +49,7 @@ Uses the `rank_bm25` algorithm combined with a **BERT WordPiece** tokenizer to f
 Unlike standard chat bots, PariShiksha is instructed to refuse questions not found in the chapter (e.g., history or unrelated sciences) with a mandatory refusal message: *"I cannot answer this from the provided chapter content."*
 
 ### 📏 Flexible Chunking
-Implements a 512-token chunking strategy with a 50-token overlap, ensuring that large conceptual blocks like "Equations of Motion" remain contiguous.
+Implements a **Token-Aware Sliding Window** chunking strategy (450 token window, 50-token overlap). This ensures that large conceptual blocks like "Equations of Motion" remain contiguous and stay well within the BERT 512-token limit for perfect indexing.
 
 ---
 
@@ -57,7 +57,9 @@ Implements a 512-token chunking strategy with a 50-token overlap, ensuring that 
 
 - **`notebook.ipynb`**: End-to-end development pipeline (Processing -> Retrieval -> Generation).
 - **`brain.py`**: Production-ready implementation using the Groq SDK.
-- **`evaluation_results.md`**: Scoring of the system against 3 axes: Correctness, Grounding, and Refusal.
+- **`test_model.py`**: Advanced audit script with Precision, Recall, and F1 metrics.
+- **`evaluation_guide.md`**: Comprehensive guide on systematic testing and validation for RAG systems.
+- **`evaluation_results.md`**: Initial baseline scoring of the system.
 - **`reflection.md`**: Technical report on architecture decisions and failure analysis.
 
 ---

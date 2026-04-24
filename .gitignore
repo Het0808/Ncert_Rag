@@ -18,3 +18,9 @@ __pycache__/
 # IDEs
 .vscode/
 .idea/
+
+# Audit and Logs
+*.txt
+*.log
+debug_retrieval.py
+read_audit.py

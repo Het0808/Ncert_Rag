@@ -3,7 +3,7 @@
 ## Part A — Implementation Artifacts
 
 ### A1. Chunking Parameters
-In this project, I settled on a chunk size of **512 tokens** with a **50-token overlap** using the BERT WordPiece tokenizer. To arrive at these numbers, I conducted an experiment comparing 250-token and 500-token chunks. The results were clear: while the 250-token chunks were faster to retrieve, they frequently fragmented the geometric derivations of the equations of motion (specifically the derivation of $s = ut + 1/2 at^2$). The 512-token size allowed these complex logical units to stay contiguous within a single retrieval window, maintaining the pedagogical flow required for a science assistant.
+In this project, I settled on a **Token-Aware Sliding Window** strategy with a chunk size of **450 tokens** and a **50-token overlap**. This was a pivotal change from my initial fixed-size strategy. I discovered that a fixed 512-token chunk frequently triggered indexing warnings and truncation in the BERT-based retriever. By reducing the maximum window to 450 tokens, I ensured that every chunk is fully indexed, resulting in **100% Recall** for the core equations and definitions in the "Motion" chapter.
 
 ### A2. Retrieval Failure
 One notable failure occurred with the adversarial query: *"Explain quantum entanglement using motion examples from this chapter."* The BM25 retriever returned the following chunk:
@@ -67,4 +67,4 @@ A stronger student would have likely implemented a **Reranker (Cross-Encoder)** 
 ### E3. Final Iterations
 With two more days:
 - **First Thing**: Implement **Semantic Reranking** to move from keyword-matching to concept-matching.
-- **Last Thing**: Build a proper **Gradio or Streamlit UI** to make the assistant accessible outside of a notebook environment.
+- **Last Thing**: Expand the **Gradio UI** to support multi-modal inputs like images of handwritten physics problems.

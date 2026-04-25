@@ -1,6 +1,7 @@
 import os
 import re
 import fitz
+import numpy as np
 from dotenv import load_dotenv
 from groq import Groq
 from rank_bm25 import BM25Okapi
@@ -27,7 +28,8 @@ class StudyAssistant:
             self._prepare_corpus(pdf_path)
             self._build_index()
         else:
-            print(f"Warning: PDF not found at {pdf_path}. RAG features disabled.")
+            print(f"Error: PDF not found at {pdf_path}. Please check the path.")
+            self.bm25 = None
 
     def _prepare_corpus(self, pdf_path):
         """
@@ -62,13 +64,17 @@ class StudyAssistant:
         tokenized_corpus = [self.tokenizer.tokenize(c['text']) for c in self.chunks]
         self.bm25 = BM25Okapi(tokenized_corpus)
 
-    def retrieve(self, query, k=3): # Reduced k to 3 to minimize noise
-        if not self.chunks: return []
+    def retrieve(self, query, k=3):
+        """Retrieves the top-k most relevant chunks using BM25."""
+        if not self.chunks or self.bm25 is None:
+            return []
+            
         tokenized_query = self.tokenizer.tokenize(query)
         scores = self.bm25.get_scores(tokenized_query)
-        import numpy as np
-        top_n = np.argsort(scores)[::-1][:k]
-        return [self.chunks[i] for i in top_n]
+        
+        # Select top-k indices based on BM25 scores
+        top_n_indices = np.argsort(scores)[::-1][:k]
+        return [self.chunks[i] for i in top_n_indices]
 
     def answer(self, question):
         results = self.retrieve(question)

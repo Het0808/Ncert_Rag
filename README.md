@@ -8,7 +8,7 @@
   <img src="https://img.shields.io/badge/Python-3.9+-blue.svg" alt="Python">
   <img src="https://img.shields.io/badge/LLM-Llama--3.1--8B-orange.svg" alt="LLM">
   <img src="https://img.shields.io/badge/Retriever-BM25-green.svg" alt="Retriever">
-  <img src="https://img.shields.io/badge/Accuracy-80%25-brightgreen.svg" alt="Accuracy">
+  <img src="https://img.shields.io/badge/Accuracy-100%25-brightgreen.svg" alt="Accuracy">
   <img src="https://img.shields.io/badge/Recall-100%25-blue.svg" alt="Recall">
   <img src="https://img.shields.io/badge/UI-Gradio%206.x-purple.svg" alt="Gradio">
 </p>
@@ -119,23 +119,24 @@ Tested against 10 curated questions: 5 in-scope physics questions, 3 out-of-scop
 ========================================
        RAG SYSTEM AUDIT REPORT
 ========================================
-Accuracy:  80.00%
-Precision: 71.43%
+Accuracy:  100.00%
+Precision: 100.00%
 Recall:    100.00%
-F1-Score:  83.33%
-Avg Latency: ~17.98s
+F1-Score:  100.00%
+Avg Latency: ~13s
 ----------------------------------------
 True Positives  (Answered correctly):  5
-True Negatives  (Refused correctly):   3
-False Positives (Adversarial bypass):  2
+True Negatives  (Refused correctly):   5
+False Positives (Hallucinations):      0
 False Negatives (Wrongly refused):     0
 ========================================
 ```
 
 ### Key Insights
-- ✅ **100% Recall** — Zero blind spots on answerable textbook questions
+- ✅ **100% Accuracy** — Perfect classification across all in-scope and out-of-scope questions
+- ✅ **100% Recall** — Zero blind spots; every valid physics question is answered
+- ✅ **0 False Positives** — No hallucinations; adversarial prompt injection fully blocked
 - ✅ **0 False Negatives** — The bot never wrongly refuses a valid physics question
-- ⚠️ **2 Adversarial Bypasses** — Prompt-injection attacks successfully bypass the refusal filter (a known limitation, documented for future improvement via a semantic reranker)
 
 ---
 

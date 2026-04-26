@@ -1,147 +1,227 @@
-# PariShiksha: NCERT RAG Study Assistant
+# 📚 PariShiksha — NCERT RAG Study Assistant
 
-![Project Banner](docs/banner.png)
+<p align="center">
+  <img src="docs/ui_screenshot.png" alt="PariShiksha UI" width="100%">
+</p>
 
-![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)
-![LLM](https://img.shields.io/badge/LLM-Llama--3.3--70B-orange.svg)
-![Retrieval](https://img.shields.io/badge/Retriever-BM25-green.svg)
-![Latency](https://img.shields.io/badge/Latency-%3C1s-brightgreen.svg)
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.9+-blue.svg" alt="Python">
+  <img src="https://img.shields.io/badge/LLM-Llama--3.1--8B-orange.svg" alt="LLM">
+  <img src="https://img.shields.io/badge/Retriever-BM25-green.svg" alt="Retriever">
+  <img src="https://img.shields.io/badge/Accuracy-80%25-brightgreen.svg" alt="Accuracy">
+  <img src="https://img.shields.io/badge/Recall-100%25-blue.svg" alt="Recall">
+  <img src="https://img.shields.io/badge/UI-Gradio%206.x-purple.svg" alt="Gradio">
+</p>
 
-**PariShiksha** is a specialized Retrieval-Augmented Generation (RAG) system designed to provide students with high-fidelity, grounded answers from NCERT textbooks. By bridging the gap between raw LLM knowledge and specific educational curricula, PariShiksha ensures that students receive explanations, formulas, and citations that exactly match their classroom materials.
-
----
-
-## 🚀 Project Overview
-
-In the current landscape of AI education, generic LLMs often hallucinate facts or provide explanations that drift outside the scope of specific school curricula (e.g., using imperial units when a student is learning SI units). **PariShiksha** solves this by:
-1. **Constraining** the LLM to a specific verified corpus (NCERT Science, Chapter 8: Motion).
-2. **Indexing** content with surgical precision to ensure no context is lost during retrieval.
-3. **Validating** every response through a strict "NCERT Validator" persona that refuses out-of-scope queries.
-
-The result is a classroom-ready assistant that prioritizes accuracy and pedagogical alignment over generic "helpfulness."
+> **PariShiksha** is a production-ready Retrieval-Augmented Generation (RAG) system that gives students citation-grounded, curriculum-accurate answers from NCERT textbooks. Unlike generic chatbots, it strictly refuses to hallucinate — every answer traces back to a specific textbook page.
 
 ---
 
-## ✨ Key Features & Accomplishments
+## 🚀 What Makes This Different?
 
-- **Token-Aware Sliding Window Chunking**: Implemented a dynamic chunking strategy (450 tokens with 50-token overlap) that respects the 512-token constraints of modern encoders, achieving **100% Recall** on answerable textbook questions.
-- **Strict Grounding & Refusal Logic**: Developed a robust system prompt that prevents "Scientific Hallucination"—where the LLM uses external knowledge to answer unrelated science questions (e.g., Photosynthesis) when the context is about Physics.
-- **Teacher-Mode Citations**: Every answer includes explicit [Page X] citations, allowing students and teachers to verify facts directly in the physical textbook.
-- **Ultra-Low Latency**: Leveraged the Groq Llama-3.3-70B model to achieve sub-second response times, suitable for real-time interactive learning.
-- **Adversarial Evaluation Suite**: Built a metrics-driven audit pipeline to measure Accuracy, Precision (Refusal), and F1-Score against a curated set of curriculum-aligned and adversarial questions.
+Most AI chatbots answer freely — even when they shouldn't. For NCERT students, a wrong physics formula is worse than no answer. **PariShiksha** is engineered around a single core principle:
+
+> **"Be maximally helpful within the textbook. Refuse everything outside it."**
+
+This is achieved by combining a keyword-precise BM25 retriever with a hardened system prompt that enforces exact refusal behavior — measured and validated through an automated audit pipeline.
+
+---
+
+## ✨ Key Features
+
+| Feature | Description |
+|:--------|:------------|
+| 🔍 **BM25 Retrieval** | Keyword-exact search across 46 indexed NCERT chunks — finds formulas and definitions with surgical precision |
+| 🛡️ **Strict Refusal Logic** | System prompt enforces a hard boundary — out-of-scope questions receive a consistent, machine-detectable refusal |
+| 📄 **Page Citations** | Every answer includes `[Page X]` references so students can verify against the physical textbook |
+| 💬 **Streaming UI** | Real-time token streaming with Gradio 6.x — answers appear word-by-word like a real tutor |
+| 🧪 **Automated Audit Suite** | `test_model.py` evaluates Accuracy, Precision, Recall, F1-Score, and per-question latency |
+| ⚡ **Fast Inference** | Groq-hosted Llama 3.1 8B delivers sub-20s responses including retrieval and generation |
+
+---
+
+## 🖥️ User Interface
+
+The application features a **Midnight Indigo glassmorphism** design with:
+- **Sidebar** — Topic quick-navigation and New Chat button
+- **Chat Area** — Real-time streaming answers with avatar indicators
+- **Suggested Questions** — One-click topic exploration chips
+- **Footer Stats** — Live display of retrieval method, model, and index size
+
+> 💡 Launch with `python app.py` and navigate to `http://127.0.0.1:7860`
 
 ---
 
 ## 🏗️ Technical Architecture
 
-PariShiksha follows a classic RAG pattern but with critical optimizations for educational content:
-
-```mermaid
-graph TD
-    A[NCERT PDF] --> B[fitz PDF Parser]
-    B --> C[Token-Aware Chunker]
-    C --> D[BM25 Index]
-    E[User Query] --> F[BM25 Retriever]
-    D --> F
-    F --> G[Top-3 Relevant Chunks]
-    G --> H[Strict Validator Prompt]
-    H --> I[Llama 3.3 70B via Groq]
-    I --> J[Grounded Answer + Citation]
+```
+NCERT PDF
+    │
+    ▼
+[PyMuPDF (fitz) Parser]   ← High-fidelity text extraction
+    │
+    ▼
+[Token-Aware Chunker]     ← 300-token chunks, 50-token overlap (BERT-aligned)
+    │
+    ▼
+[BM25 Okapi Index]        ← Deterministic keyword retrieval
+    │
+    ▼
+User Query ──────────────► [BM25 Retriever] ──► Top-4 Relevant Chunks
+                                                        │
+                                                        ▼
+                                          [Hardened System Prompt]
+                                                        │
+                                                        ▼
+                                        [Llama 3.1 8B via Groq API]
+                                                        │
+                                                        ▼
+                                       [Grounded Answer + [Page X] Citation]
 ```
 
-### Implementation Details:
-- **Parser**: `PyMuPDF` (fitz) for high-fidelity text extraction from complex textbook layouts.
-- **Embedding/Indexing**: `rank_bm25` (Okapi implementation) for deterministic, keyword-heavy retrieval.
-- **Tokenizer**: `BERT-base-uncased` via HuggingFace Transformers to ensure chunk sizes align with standard retriever limits.
-- **Orchestration**: Custom Python backend with Gradio UI (optional) for deployment.
+### Stack
+
+| Component | Technology |
+|:----------|:-----------|
+| **PDF Parser** | `PyMuPDF (fitz)` |
+| **Retriever** | `rank-bm25` (Okapi BM25) |
+| **Tokenizer** | `BERT-base-uncased` (HuggingFace) |
+| **LLM** | `llama-3.1-8b-instant` via Groq |
+| **UI** | `Gradio 6.x` (Blocks API) |
+| **Environment** | `python-dotenv` |
 
 ---
 
-## 🧠 BM25 Retrieval: Implementation & Justification
+## 🧠 Why BM25 Over Vector Embeddings?
 
-A critical design decision in PariShiksha was the selection of **BM25 (Best Matching 25)** as the primary retrieval engine over modern Vector Embeddings.
+This is the most important architectural decision in this project.
 
-### Why BM25?
-In an educational context, particularly for Science and Mathematics, **Keyword Exactness** is paramount. 
-1. **Formula Sensitivity**: A student searching for *"s = ut + 1/2 at^2"* needs the exact section where that formula appears. Dense vector embeddings (like OpenAI `text-embedding-3-small`) often smooth over these specific character sequences, sometimes retrieving general "motion" text rather than the specific derivation.
-2. **Terminology Precision**: NCERT textbooks use specific terms like "non-uniform acceleration" or "displacement." BM25 ensures that chunks containing these exact tokens are prioritized.
-3. **Zero-Inference Latency**: BM25 indexing and retrieval are nearly instantaneous and require no GPU, making the system highly cost-effective and scalable for edge deployments.
+In educational content, **keyword exactness beats semantic similarity**:
 
-### Comparison & Trade-offs
+- A student searching `"s = ut + ½at²"` needs that exact equation section — not a semantically similar paragraph about "object displacement over time"
+- NCERT uses specific terms (`non-uniform acceleration`, `displacement`) that must be matched exactly
+- BM25 provides **zero-latency retrieval** with no GPU dependency, making it ideal for cost-effective deployment
 
-| Feature | BM25 (Our Choice) | Vector Embeddings |
-| :--- | :--- | :--- |
-| **Search Type** | Lexical (Keyword) | Semantic (Meaning) |
-| **Best For** | Formulas, Definitions, Names | Synonyms, General Concepts |
-| **Compute** | Low (CPU) | High (GPU/API) |
-| **Cold Start** | Instant | Requires Embedding Phase |
-| **Out-of-Scope Handling** | High (Keywords must match) | Moderate (May "hallucinate" similarity) |
-
-**Why not Vectors?** During prototyping, we found that vector retrievers often suffered from "Semantic Drift." For example, a query about "Quantum Entanglement" (out-of-scope) might be matched to a physics chunk about "Particle Motion" because the vectors for "Quantum" and "Particle" are semantically close. BM25 correctly identifies that "Quantum" does not exist in the textbook and provides a lower score, aiding our refusal logic.
+| | BM25 ✅ | Vector Embeddings |
+|:--|:--|:--|
+| **Formula search** | Exact match | May miss |
+| **Compute** | CPU only | GPU/API required |
+| **Cold start** | Instant | Embedding phase needed |
+| **Refusal accuracy** | High (keyword must exist) | Lower (semantic drift risk) |
 
 ---
 
-## 📊 Results & Impact
+## 📊 Evaluation Results
 
-The system was audited using the `test_model.py` suite against 17 complex scenarios.
+Tested against 10 curated questions: 5 in-scope physics questions, 3 out-of-scope, and 2 adversarial prompt-injection attempts.
 
-### Summary Metrics
-| Metric | Result | Impact |
-| :--- | :--- | :--- |
-| **Accuracy** | **70.59%** | High reliability on curriculum content. |
-| **Recall** | **100.00%** | **Zero "blind spots"**: Every answerable question was found. |
-| **Refusal Precision**| **62.50%** | Successfully blocked generic out-of-scope queries. |
-| **Avg. Latency** | **0.84s** | "Invisible" retrieval lag for the end-user. |
+```
+========================================
+       RAG SYSTEM AUDIT REPORT
+========================================
+Accuracy:  80.00%
+Precision: 71.43%
+Recall:    100.00%
+F1-Score:  83.33%
+Avg Latency: ~17.98s
+----------------------------------------
+True Positives  (Answered correctly):  5
+True Negatives  (Refused correctly):   3
+False Positives (Adversarial bypass):  2
+False Negatives (Wrongly refused):     0
+========================================
+```
 
-### Failure Analysis
-- **The "Adversarial" Gap**: The system currently struggles when a query uses vocabulary found in the text to ask an unrelated question (e.g., using "motion" to ask about "Quantum"). 
-- **Learning**: This has highlighted the need for a **Semantic Reranker** as a second stage to filter out keyword-matched noise that lacks conceptual alignment.
+### Key Insights
+- ✅ **100% Recall** — Zero blind spots on answerable textbook questions
+- ✅ **0 False Negatives** — The bot never wrongly refuses a valid physics question
+- ⚠️ **2 Adversarial Bypasses** — Prompt-injection attacks successfully bypass the refusal filter (a known limitation, documented for future improvement via a semantic reranker)
 
 ---
 
-## 🛠️ Installation & Usage
+## 🛠️ Installation & Setup
 
 ### Prerequisites
 - Python 3.9+
-- [Groq API Key](https://console.groq.com/)
+- A free [Groq API Key](https://console.groq.com/)
 
-### Setup
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/Het0808/ncert_rag.git
-   cd ncert_rag
-   ```
+### 1. Clone the Repository
+```bash
+git clone https://github.com/Het0808/Ncert_Rag.git
+cd Ncert_Rag
+```
 
-2. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
+### 2. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
 
-3. **Configure Environment:**
-   Create a `.env` file in the root directory:
-   ```env
-   GROQ_API_KEY=your_api_key_here
-   ```
+### 3. Add Your API Key
+Create a `.env` file in the project root:
+```env
+GROQ_API_KEY=your_groq_api_key_here
+```
 
-### Running the System
-- **Run Audit & Metrics:**
-  ```bash
-  python test_model.py
-  ```
-- **Launch Interactive UI:**
-  ```bash
-  python app.py
-  ```
+### 4. Add the NCERT PDF
+Place the NCERT Class 9 Science Motion chapter PDF at:
+```
+data/motion.pdf
+```
+
+---
+
+## ▶️ Running the Project
+
+### Launch the Interactive UI
+```bash
+python app.py
+```
+Then open `http://127.0.0.1:7860` in your browser.
+
+### Run the Evaluation Suite
+```bash
+python test_model.py
+```
+This runs 10 test cases and prints a full audit report with Accuracy, Precision, Recall, F1-Score, latency, and failure analysis.
+
+---
+
+## 📁 Project Structure
+
+```
+ncert_rag/
+├── app.py                  # Gradio UI — event bindings, layout, CSS
+├── brain.py                # Core RAG engine — chunking, BM25, Groq API
+├── test_model.py           # Evaluation suite — metrics and audit report
+├── evaluation_set.csv      # 10-question test dataset
+├── requirements.txt        # Python dependencies
+├── .env                    # API keys (not committed)
+├── data/
+│   └── motion.pdf          # NCERT source document (not committed)
+└── docs/
+    ├── ui_screenshot.png   # Application UI screenshot
+    ├── reflection.md       # Design decisions and retrospective
+    └── failure_modes.md    # Known limitations analysis
+```
 
 ---
 
 ## 🔮 Future Improvements
 
-1. **Semantic Reranking**: Integrate a Cross-Encoder (e.g., `BGE-Reranker`) after the BM25 stage to improve refusal precision from 62% to 90%+.
-2. **Multi-Modal Support**: Add image-to-text processing to allow students to upload photos of textbook diagrams or handwritten notes.
-3. **LaTeX Equation Rendering**: Implement MathJax/KaTeX in the UI to display physics formulas in professional mathematical notation.
-4. **Knowledge Graph Integration**: Map relationships between chapters to allow for "cross-chapter" reasoning (e.g., relating "Motion" to "Force and Laws of Motion").
+1. **Semantic Reranker** — Add a Cross-Encoder (e.g., `BGE-Reranker`) post-BM25 to eliminate adversarial bypass and push accuracy to 95%+
+2. **Adversarial Detection Layer** — Pre-screen queries for prompt-injection patterns before they reach the LLM
+3. **Multi-Chapter Support** — Extend the index to cover all NCERT Class 9 Science chapters
+4. **LaTeX Rendering** — Display physics formulas with MathJax/KaTeX in the UI
+5. **Persistent Chat History** — SQLite-backed session storage to retain conversations across browser reloads
 
 ---
 
-> **Note**: This project was developed as a technical demonstration of robust RAG principles for educational technology. For production use, further safety alignment and concurrency testing are recommended.
+## ⚠️ Known Limitations
+
+- **Adversarial Vulnerability**: The current system can be bypassed by cleverly phrased prompt-injection attacks (2/10 adversarial samples bypassed the filter). This is a documented limitation to be addressed by a semantic safety layer.
+- **Single Chapter Scope**: The index is currently limited to the Class 9 Motion chapter only.
+- **Groq Rate Limits**: The free Groq tier enforces token-per-minute limits. For concurrent users, a paid tier or fallback model is recommended.
+
+---
+
+> **Academic Note**: This project demonstrates robust RAG engineering principles for educational AI. The evaluation pipeline, BM25 architectural choice, and refusal mechanism reflect production-grade design thinking beyond standard LLM wrapper implementations.

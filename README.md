@@ -140,6 +140,18 @@ False Negatives (Wrongly refused):     0
 
 ---
 
+## 📄 Documentation
+
+| Document | Description |
+| :--- | :--- |
+| [**chunking_strategy.md**](docs/chunking_strategy.md) | Tokenizer comparison, chunk size rationale, and processing flowchart |
+| [**data_organization.md**](docs/data_organization.md) | How extracted textbook content is categorized and indexed |
+| [**failure_modes.md**](docs/failure_modes.md) | Production failure analysis and hybrid adversarial resolution |
+| [**reflection.md**](docs/reflection.md) | Architecture decisions and system engineering retrospectives |
+| [**evaluation_results.md**](docs/evaluation_results.md) | Final 10-question benchmark results with precision/recall audit |
+
+---
+
 ## 🛠️ Installation & Setup
 
 ### Prerequisites

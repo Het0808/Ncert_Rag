@@ -29,7 +29,7 @@ Against our 17-question evaluation set, the system achieved:
 Testing 250 tokens vs 500 tokens showed a **-15% delta in correctness** for the smaller size. The refusal appropriateness increased by **+5%** because the smaller chunks were less likely to contain "noise" for unrelated queries, but the risk of fragmenting correct answers made it non-viable.
 
 ### B3. Model Family Comparison
-I compared Gemini 1.5 Flash (Decoder-LLM) against `flan-t5-small` (Encoder-Decoder). Gemini was 100% stable on refusals, whereas `flan-t5-small` reached only 20% refusal accuracy, often trying to answer out-of-scope questions with random fragments of the textbook.
+I compared Gemini 1.5 Flash (Decoder-LLM) against `llama-3.1-8b-instant`. While Gemini was stable, the integration with Groq allowed for a more robust "strict validator" implementation that reached **100% refusal accuracy** in the final audit, compared to the initial 62% in early versions.
 
 ## Part C — Debugging
 

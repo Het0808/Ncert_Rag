@@ -144,7 +144,8 @@ False Negatives (Wrongly refused):     0
 
 ### Prerequisites
 - Python 3.9+
-- A free [Groq API Key](https://console.groq.com/)
+- [Groq API Key](https://console.groq.com/) (For Main App)
+- [Gemini API Key](https://aistudio.google.com/) (For Phase 1 & 2 Notebook)
 
 ### 1. Clone the Repository
 ```bash
@@ -157,10 +158,11 @@ cd Ncert_Rag
 pip install -r requirements.txt
 ```
 
-### 3. Add Your API Key
+### 3. Add Your API Keys
 Create a `.env` file in the project root:
 ```env
 GROQ_API_KEY=your_groq_api_key_here
+GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
 ### 4. Add the NCERT PDF

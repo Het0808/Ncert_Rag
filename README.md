@@ -239,7 +239,11 @@ ncert_rag/
 
 ---
 
-> **Academic Note**: This project demonstrates robust RAG engineering principles for educational AI. The evaluation pipeline, BM25 architectural choice, and refusal mechanism reflect production-grade design thinking beyond standard LLM wrapper implementations.
 ## 👨‍💻 Author
 
-- **Het Patel**  
+- **Het Patel**
+  
+---
+
+> **Academic Note**: This project demonstrates robust RAG engineering principles for educational AI. The evaluation pipeline, BM25 architectural choice, and refusal mechanism reflect production-grade design thinking beyond standard LLM wrapper implementations.
+
